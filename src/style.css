@@ -1,0 +1,55 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #1c1b22;
+  background: #f6f5fb;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.app__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.status {
+  color: #6b6880;
+  font-size: 14px;
+}
+
+.notes {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.note {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
+}
+
+.note h2 {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.note p {
+  margin: 0 0 8px;
+  color: #3d3a4c;
+}
+
+.note time {
+  color: #8a879b;
+  font-size: 13px;
+}
