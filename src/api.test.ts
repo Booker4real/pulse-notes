@@ -17,7 +17,7 @@ describe('fetchNotes', () => {
 
     const result = await fetchNotes(fetchImpl as unknown as typeof fetch);
 
-    expect(fetchImpl).toHaveBeenCalledWith(NOTES_URL);
+    expect(fetchImpl).toHaveBeenCalledWith(NOTES_URL, { cache: 'no-store' });
     expect(result.map((note) => note.title)).toEqual(['Newer', 'Older']);
   });
 
@@ -28,4 +28,19 @@ describe('fetchNotes', () => {
       'Could not load notes (HTTP 503)',
     );
   });
+
+  it('sorts timestamps chronologically across timezones and normalizes cache keys', async () => {
+    const result = await fetchNotes(async () => okResponse([
+      { ...notes[0], updatedAt: '2026-11-10T10:00:00+08:00' },
+      { ...notes[1], updatedAt: '2026-11-10T03:00:00Z' },
+    ]));
+    expect(result.map((note) => note.id)).toEqual(['2', '1']);
+    expect(result[1].updatedAt).toBe('2026-11-10T02:00:00.000Z');
+  });
+
+  it.each([{}, [null], [{ ...notes[0], updatedAt: 'bad date' }], [{ ...notes[0], id: '' }]])(
+    'rejects malformed note responses: %j', async (data) => {
+      await expect(fetchNotes(async () => okResponse(data))).rejects.toThrow('invalid response');
+    },
+  );
 });
